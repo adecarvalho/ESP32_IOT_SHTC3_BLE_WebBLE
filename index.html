@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="data:;" />
+	<link rel="stylesheet" href="w3.css" />
+	<title>IOT BLE Serveur</title>
+
+	<style>
+		.fond_ecran {
+			background-color: rgb(245, 245, 245);
+			color: rgb(50, 50, 50);
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		.my-header {
+			background-color: rgb(50, 50, 50);
+			color: white;
+		}
+
+		.my-range {
+			width: 100%;
+		}
+
+		.my-gauge {
+			background-color: rgb(146, 175, 130);
+			box-shadow: 0 0 20px skyblue;
+		}
+
+		.my-graphic {
+			background-color: rgb(250, 250, 250);
+			box-shadow: 0 0 20px skyblue;
+		}
+	</style>
+</head>
+
+<body class="fond_ecran">
+
+	<div class="w3-container w3-asphalt">
+		<h1 class="w3-center">ESP32 IOT Web-BLE</h1>
+	</div>
+
+	<!-- connection BLE-->
+	<section class="w3-container w3-margin">
+		<div class="w3-bar">
+			<button id="btn_connect"
+				class="w3-button w3-white w3-border w3-border-green w3-round-large">&#x1F4F6;&nbsp;Connect to BLE
+				Device</button>
+			<button id="btn_disconnect" class=" hidden w3-white w3-border w3-border-red w3-round-large"> &#x274C;
+				&nbsp;Disconnect
+				Device</button>
+		</div>
+
+		<div class="w3-panel w3-round-large w3-border w3-border-green">
+			<p>Infos: <span id="panel_status"></span></p>
+		</div>
+	</section>
+
+	<!-- main content -->
+	<main>
+		<!-- section temp-->
+		<section class="w3-container w3-row w3-margin-bottom">
+			<!-- article temperature -->
+			<article class="w3-third w3-container">
+				<div class="my-gauge">
+					<header class="w3-container my-header">
+						<h1 class="w3-center"> &#x1F321;Température</h1>
+					</header>
+					<div class="w3-container w3-center">
+						<canvas id="canvas_local_temperature_id" width="400px" height="300px"></canvas>
+					</div>
+				</div>
+			</article>
+
+			<!-- article humidite-->
+			<article class="w3-third w3-container">
+				<div class="my-gauge">
+					<header class="w3-container my-header">
+						<h1 class="w3-center">&#128167;Humidité</h1>
+					</header>
+					<div class="w3-container w3-center">
+						<canvas id="canvas_local_humidity_id" width="400px" height="300px"></canvas>
+					</div>
+				</div>
+			</article>
+
+			<!-- article dewPoint-->
+			<article class="w3-third w3-container">
+				<div class="my-gauge">
+					<header class="w3-container my-header">
+						<h1 class="w3-center">&#x1F4A6;Point Rosée</h1>
+					</header>
+					<div class="w3-container w3-center">
+						<canvas id="canvas_local_dewpoint_id" width="400px" height="300px"></canvas>
+					</div>
+				</div>
+			</article>
+		</section>
+		<!-- input ranges -->
+		<section class="w3-container">
+			<div class="w3-row-padding">
+				<article class="w3-third">
+					<div class="w3-card-4">
+						<header class="w3-container my-header">
+							<h1 class="w3-center">Led RGB</h1>
+						</header>
+						<!--  -->
+						<div class="w3-container">
+							<!-- range RED -->
+							<label for="range-red">RED Color</label>
+							<div class="w3-row-padding">
+								<div class="w3-threequarter">
+									<input class="my-range" type="range" id="range-red-id" name="range-red" step="1"
+										min="0" max="50" value="0">
+								</div>
+								<div class="w3-quarter w3-center w3-border w3-round-large w3-asphalt">
+									<label><span id="red-value-id">0</span></label>
+								</div>
+							</div>
+						</div>
+						<!--  -->
+						<div class="w3-container">
+							<!-- range GREEN -->
+							<label for="range-green">GREEN Color</label>
+							<div class="w3-row-padding">
+								<div class="w3-threequarter">
+									<input class="my-range" type="range" id="range-green-id" name="range-green" step="1"
+										min="0" max="50" value="0">
+								</div>
+								<div class="w3-quarter w3-center w3-border w3-round-large w3-asphalt">
+									<label><span id="green-value-id">0</span></label>
+								</div>
+							</div>
+						</div>
+						<!--  -->
+						<div class="w3-container">
+							<!-- range BLUE -->
+							<label for="range-blue">BLUE Color</label>
+							<div class="w3-row-padding">
+								<div class="w3-threequarter">
+									<input class="my-range" type="range" id="range-blue-id" name="range-blue" step="1"
+										min="0" max="50" value="0">
+								</div>
+								<div class="w3-quarter w3-center w3-border w3-round-large w3-asphalt">
+									<label><span id="blue-value-id">0</span></label>
+								</div>
+							</div>
+						</div>
+						<!-- button confirmation -->
+						<div class="w3-container w3-padding w3-center">
+							<button id="btn-validation-id"
+								class="w3-button w3-white w3-border w3-border-red w3-round-large">Validation</button>
+						</div>
+					</div>
+
+				</article>
+			</div>
+		</section>
+
+	</main>
+	<!-- end main content -->
+	<!--  -->
+	<footer class="w3-container">
+		<p><i>&copy; A.DeCarvalho </i></p>
+	</footer>
+	<!---->
+	<script src="ezWidgets.min.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
